@@ -1,9 +1,19 @@
+// includes
 const express = require('express');
 const bodyParser = require('body-parser');
-// initialize our express app
+
+//required files
+let config = require('./config');
+
+// initialize express app
 const app = express();
 
-let port = 3003;
+
+// Environment
+let environment = 'LOCAL';
+
+let port = process.env.PORT || config[environment].SERVER_PORT;
+
 // controllers
 // var sjcCaseWFController = require('./controllers/sjcCaseWFController');
 
