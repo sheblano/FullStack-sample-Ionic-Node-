@@ -24,6 +24,8 @@ app.use(bodyParser.urlencoded({
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 
+// connect to the database
+mongoose.connect('mongodb://atlasAdmin:' + config[environment].MONGO_ATLAS_PW + '@cluster0-shard-00-00-lzlp6.mongodb.net:27017,cluster0-shard-00-01-lzlp6.mongodb.net:27017,cluster0-shard-00-02-lzlp6.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true', {useNewUrlParser: true});
 
 UserController(app);
 

@@ -13,4 +13,6 @@ module.exports = function (app) {
             "message": "Welcome2 to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."
         });
     });
+
+    
 }
