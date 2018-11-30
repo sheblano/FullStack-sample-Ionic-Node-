@@ -1,21 +1,31 @@
 // includes
 const express = require('express');
 const bodyParser = require('body-parser');
-
-//required files
+var mongoose = require('mongoose');
+// var cors = require('cors');
 let config = require('./config');
+
+// controllers
+let UserController = require('./controllers/userController');
+
+// Application Environment
+let environment = 'LOCAL';
+let port = process.env.PORT || config[environment].SERVER_PORT;
 
 // initialize express app
 const app = express();
 
 
-// Environment
-let environment = 'LOCAL';
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-let port = process.env.PORT || config[environment].SERVER_PORT;
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
 
-// controllers
-// var sjcCaseWFController = require('./controllers/sjcCaseWFController');
+
+UserController(app);
 
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
