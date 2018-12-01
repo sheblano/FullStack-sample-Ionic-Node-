@@ -2,15 +2,25 @@ const mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
 const userSchema = new schema({
-    _id: mongoose.Types.ObjectId,
     firstName: String,
     lastName: String,
     email: String,
+    phoneNumber: String,
+    username: String,
+    password: String,
+    profilePicUrl: String,
+
     accounts: [{
-        _id: mongoose.Types.ObjectId,
-        date: Date,
+        number: String,
+        accType: String,
         balance: Number,
-        branchName: String
+        date: Date,
+        transactions:[{
+            _id: mongoose.Schema.Types.ObjectId,
+            trxType: String,
+            date: Date,
+            value: Number
+        }]
     }],
 }, {
     timestamps: true
