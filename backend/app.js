@@ -1,9 +1,7 @@
-// includes
 const express = require('express');
 const bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-// var cors = require('cors');
-let config = require('./config');
+const mongoose = require('mongoose');
+const config = require('./config');
 
 // controllers
 let UserController = require('./controllers/userController');

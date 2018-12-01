@@ -1,11 +1,10 @@
 {
+    "JWT_KEY": "thispasscodeissecret",
     "LOCAL": {
-        "SERVER_NAME": "http://localhost:3003/",
         "SERVER_PORT": "3003",
         "MONGO_ATLAS_PW": "admin123"
     },
     "Server": {
-        "SERVER_NAME": "http://localhost:3003/",
         "SERVER_PORT": "3003",
         "MONGO_ATLAS_PW": "admin123"
     }
