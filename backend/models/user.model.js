@@ -16,7 +16,6 @@ const userSchema = new schema({
         balance: Number,
         date: Date,
         transactions:[{
-            _id: mongoose.Schema.Types.ObjectId,
             trxType: String,
             date: Date,
             value: Number

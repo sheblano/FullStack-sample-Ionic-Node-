@@ -13,6 +13,12 @@ const Utlis = {
                 callback(hashedPw);
             }
         });
+    },
+    generateJWT: function (payload) {
+        const token = jwt.sign(payload, config.JWT_KEY, {
+            expiresIn: "1h"
+        });
+        return token;
     }
 };
 

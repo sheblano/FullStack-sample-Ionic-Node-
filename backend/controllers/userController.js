@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Utlis = require('../helpers/utlis');
+const checkAuth = require('../middeware/auth');
 
 module.exports = function (app) {
     const userRouteUrlPrefix = '/api/user';
 
     /**
      * Ping Server API
+     * this API is NOT protected
      */
     app.get('/', (req, res) => {
         res.json({
@@ -19,6 +21,7 @@ module.exports = function (app) {
 
     /**
      * Add random users to the database for testing the app
+     * this API is NOT protected
      */
     app.get(`${userRouteUrlPrefix}/addUsers`, (req, res) => {
         const random = Math.floor(Date.now() / 1000); // timestamp in seconds
@@ -50,19 +53,16 @@ module.exports = function (app) {
                         ]
                     },
                     {
-                        // _id: new mongoose.Types.ObjectId(),
                         number: (random + 2000).toString(),
                         accType: 'Saving Account',
                         balance: Math.floor(Math.random() * 20000),
                         date: new Date,
                         transactions: [{
-                                // _id: new mongoose.Types.ObjectId(),
                                 trxType: 'in',
                                 date: new Date,
                                 value: 3000
                             },
                             {
-                                // _id: new mongoose.Types.ObjectId(),
                                 trxType: 'out',
                                 date: new Date,
                                 value: 2500
@@ -92,8 +92,9 @@ module.exports = function (app) {
     /**
      * Get the user details 
      * @input user._id
+     * this API is NOT protected
      */
-    app.get(`${userRouteUrlPrefix}/:userId`, (req, res) => {
+    app.get(`${userRouteUrlPrefix}/:userId`, checkAuth, (req, res) => {
         const id = req.params.userId;
         User.findById(id).exec()
             .then(result => {
@@ -121,6 +122,7 @@ module.exports = function (app) {
      * User loign 
      * @input user.username
      * @input user.password
+     * this API is protected by token
      */
     app.post(`${userRouteUrlPrefix}/login`, (req, res) => {
         User.find({
@@ -132,6 +134,7 @@ module.exports = function (app) {
                         success: 0,
                         errorMsg: 'authentication failure'
                     });
+                    console.log('1');
                 }
                 bcrypt.compare(req.body.password, user[0].password, (err, response) => {
                     if (err) {
@@ -139,16 +142,14 @@ module.exports = function (app) {
                             success: 0,
                             errorMsg: 'authentication failure'
                         });
+                        console.log('2');
                     }
                     // response = true;
                     if (response) { // if password is correct
-                        const token = jwt.sign({
+                        const token = Utlis.generateJWT({
                             email: user[0].email,
                             userId: user[0]._id
-                        }, config.JWT_KEY, {
-                            expiresIn: "1h"
-                        });
-
+                        })
                         return res.status(200).json({
                             success: 1,
                             token: token
@@ -158,6 +159,7 @@ module.exports = function (app) {
                             success: 0,
                             errorMsg: 'authentication failure'
                         });
+                        console.log('3');
                     }
                 });
 
