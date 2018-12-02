@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const config = require('./config');
 
 // controllers
-let UserController = require('./controllers/userController');
+let UserController = require('./routes/userController');
 
 // Application Environment
 let environment = 'LOCAL';

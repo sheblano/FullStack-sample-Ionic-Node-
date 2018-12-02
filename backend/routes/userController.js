@@ -1,17 +1,15 @@
 const config = require('../config');
 const User = require('../models/user.model');
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const Utlis = require('../helpers/utlis');
 const checkAuth = require('../middeware/auth');
 
 module.exports = function (app) {
-    const userRouteUrlPrefix = '/api/user';
+    const userRouteUrlPrefix = config.USER_BASE_ROUTE;
 
     /**
      * Ping Server API
-     * this API is NOT protected
+     * API is NOT protected
      */
     app.get('/', (req, res) => {
         res.json({
@@ -21,9 +19,9 @@ module.exports = function (app) {
 
     /**
      * Add random users to the database for testing the app
-     * this API is NOT protected
+     * API is NOT protected
      */
-    app.get(`${userRouteUrlPrefix}/addUsers`, (req, res) => {
+    app.get(`${userRouteUrlPrefix}/adduser`, (req, res) => {
         const random = Math.floor(Date.now() / 1000); // timestamp in seconds
         Utlis.hashPassword(random, (hashedPass) => {
             const user = new User({
@@ -92,15 +90,18 @@ module.exports = function (app) {
     /**
      * Get the user details 
      * @input user._id
-     * this API is NOT protected
+     * API is NOT protected
      */
     app.get(`${userRouteUrlPrefix}/:userId`, checkAuth, (req, res) => {
         const id = req.params.userId;
         User.findById(id).exec()
             .then(result => {
-                console.log(result);
+                // console.log(result);
                 if (result) {
-                    res.status(200).json(result);
+                    res.status(200).json({
+                        success: 1,
+                        result: result
+                    });
                 } else {
                     res.status(404).json({
                         success: 0,
@@ -122,7 +123,7 @@ module.exports = function (app) {
      * User loign 
      * @input user.username
      * @input user.password
-     * this API is protected by token
+     * API is protected by token
      */
     app.post(`${userRouteUrlPrefix}/login`, (req, res) => {
         User.find({
